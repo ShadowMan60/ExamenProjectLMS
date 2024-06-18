@@ -1,0 +1,1 @@
+<h1>dit is the pagina voor {{ $game->name }}</h1>
