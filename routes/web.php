@@ -28,3 +28,7 @@ Route::post('/games', function (\Illuminate\Http\Request $request) {
 Route::get('/games/{game}', function (Game $game) {
     return view('games.show', compact('game'));
 });
+
+Route::get('/games/{game}/edit', function (Game $game) {
+    return view('games.edit', compact('game'));
+});

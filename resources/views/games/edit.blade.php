@@ -1,0 +1,1 @@
+<h1>edit {{ $game->name }}</h1>
