@@ -1,1 +1,1 @@
-<a href="create.blade.php">Maak game aan</a>
+<a href="{{url('/games/create')}}">Maak game aan</a>
