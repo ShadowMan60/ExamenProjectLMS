@@ -1,3 +1,6 @@
+@php
+    $user = \App\Models\User::find(session('user_id'));
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -48,7 +51,7 @@
     </style>
 </head>
 <body>
-    <h1>Welcome User <br> Please Select Quiz</h1>
+    <h1>Welcome {{ $user->name ?? 'Guest' }} <br> Please Select Quiz</h1>
     <div>
         <h2>Quiz 1</h2>
         <button type="submit">Start</button>

@@ -22,6 +22,15 @@
             color: #2c3e50;
             font-size: 40px;
         }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        form * {
+            margin: 15px;
+        }
         a {
             display: flex;
             top:0;
@@ -60,8 +69,23 @@
 </head>
 <body>
     <h1>Welcome to the Charging Quiz</h1>
-    <a href="adminacces.blade.php">Admin?</a>
-    <input type="text" placeholder="Username">
-    <button type="submit">Start</button>
+    
+    <form method="POST" action="{{ route('guest.start') }}">
+        @csrf
+        <input type="text" name="name" placeholder="Username" required>
+        <button type="submit">Start</button>
+    </form>
+
+    <a href="{{ route('admin.access') }}">Admin?</a>
+
+    @if ($errors->any())
+        <div style="color: red; margin-top: 20px;">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 </body>
 </html>

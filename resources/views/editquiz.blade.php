@@ -15,7 +15,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: space-around;
-            height: 100vh;
+            height: max-content;
         }
         h1 {
             margin-top:10vh;
