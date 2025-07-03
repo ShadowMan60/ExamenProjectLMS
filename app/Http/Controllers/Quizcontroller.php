@@ -61,9 +61,10 @@ class QuizController extends Controller
 
         return redirect()->route('quiz.show', $quizId)->with('success', 'Question deleted.');
     }
-}
 
-public function getAnswers(Question $question)
-{
-    return response()->json($question->answers()->select('id', 'text')->get());
+
+    public function getAnswers(Question $question)
+    {
+        return response()->json($question->answers()->select('id', 'text')->get());
+    }
 }
