@@ -53,7 +53,7 @@
     </style>
 </head>
 <body>
-    <h1>Welcome {{ $user->name ?? 'Guest' }} <br> Please Select Quiz</h1>
+    <h1>Welcome {{ $user->name ?? 'Admin' }} <br> Please Select Quiz</h1>
 
     @foreach($quizzes as $quiz)
         <div class="quiz-item">

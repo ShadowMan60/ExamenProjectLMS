@@ -76,7 +76,7 @@
         <button type="submit">Start</button>
     </form>
 
-    <a href="{{ route('admin.access') }}">Admin?</a>
+    <a href="{{ route('admin.login.form') }}">Admin?</a>
 
     @if ($errors->any())
         <div style="color: red; margin-top: 20px;">

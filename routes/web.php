@@ -24,7 +24,9 @@ Route::put('/admin/edit-question/{id}', [AdminController::class, 'updateQuestion
 Route::put('/admin/edit-answer/{id}', [AdminController::class, 'updateAnswer'])->name('admin.edit-answer');
 Route::post('/admin/add-question-with-answers', [AdminController::class, 'addQuestionWithAnswers'])->name('admin.add-question-with-answers');
 Route::delete('/admin/delete-question/{id}', [AdminController::class, 'deleteQuestion'])->name('admin.delete-question');
+Route::put('/admin/edit-answers/{question}', [AdminController::class, 'updateAnswersForQuestion']);
 Route::get('/quiz/{quiz}', [QuizController::class, 'show'])->name('quiz.show');
 Route::get('/question/{question}/edit', [QuizController::class, 'editQuestion'])->name('question.edit');
 Route::post('/question/{question}', [QuizController::class, 'updateQuestion'])->name('question.update');
 Route::delete('/question/{question}', [QuizController::class, 'deleteQuestion'])->name('question.delete');
+
