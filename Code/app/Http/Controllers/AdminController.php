@@ -155,10 +155,6 @@ class AdminController extends Controller
     {
         $question = Question::findOrFail($id);
 
-        if ($question->image && Storage::disk('public')->exists($question->image)) {
-            Storage::disk('public')->delete($question->image);
-        }
-
         $question->answers()->delete();
 
         $question->delete();

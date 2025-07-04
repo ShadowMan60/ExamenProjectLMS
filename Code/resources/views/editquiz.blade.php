@@ -26,12 +26,12 @@
             background-color: #ecf0f1;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            width: 50vw;
+            width: 60vw;
             display: flex;
             flex-direction: column;
         }
         div.answer, div.question {
-            width: 45vw;
+            width: 55vw;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -86,7 +86,9 @@
                 @endif
 
                 <button onclick="openEditModal('question', {{ $question->id }}, '{{ addslashes($question->text) }}')">Edit Question</button>
-                <form method="POST" action="{{ url('/admin/delete-question/' . $question->id) }}" onsubmit="return confirm('Are you sure you want to delete this question?');" style="display:inline;">
+                <form method="POST" action="{{ url('/admin/delete-question/' . $question->id) }}"
+                    onsubmit="return deleteQuestionAndImage(this, '{{ $question->image }}');"
+                    style="display:inline;">
                     @csrf
                     @method('DELETE')
                     <button type="submit" style="background:#e74c3c;">Delete Question</button>
@@ -249,6 +251,30 @@
 
         function closeAddQuestionModal() {
             document.getElementById('addQuestionModal').style.display = 'none';
+        }
+        function deleteQuestionAndImage(form, imagePath) {
+            const confirmed = confirm("Are you sure you want to delete this question?");
+            if (!confirmed) return false;
+
+            // Submit the form (will delete question from DB)
+            form.submit();
+
+            // Then send request to delete image from filesystem
+            if (imagePath) {
+                fetch(`/admin/delete-question-image/${encodeURIComponent(imagePath)}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json',
+                    }
+                }).then(res => {
+                    if (!res.ok) throw new Error('Image not found or could not be deleted.');
+                }).catch(err => {
+                    console.error('Failed to delete image:', err);
+                });
+            }
+
+            return false; // prevent double-submit — form.submit() is already called manually
         }
     </script>
 </body>

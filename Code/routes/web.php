@@ -28,3 +28,14 @@ Route::post('/admin/add-question-with-answers', [AdminController::class, 'addQue
 Route::delete('/admin/delete-question/{id}', [AdminController::class, 'deleteQuestion'])->name('admin.delete-question');
 Route::get('/admin/results/{quiz}', [QuizController::class, 'showResult'])->name('quiz.results');
 Route::get('/addadminuser', [AdminController::class, 'addAdminUser']);
+
+Route::delete('/admin/delete-question-image/{filename}', function ($filename) {
+    $path = public_path("storage/questions/" . basename($filename));
+
+    if (file_exists($path)) {
+        unlink($path);
+        return response()->json(['status' => 'ok']);
+    }
+
+    return response()->json(['status' => 'not_found'], 404);
+})->name('admin.delete-question-image');
