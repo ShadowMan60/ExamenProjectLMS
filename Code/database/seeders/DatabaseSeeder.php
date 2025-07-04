@@ -1,0 +1,16 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+
+class DatabaseSeeder extends Seeder
+{
+    public function run()
+    {
+        // Call your QuizSeeder here
+        $this->call(QuizSeeder::class);
+        $this->call(AnswerSeeder::class);
+
+    }
+}
