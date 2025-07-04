@@ -12,15 +12,15 @@ class GuestController extends Controller
 {
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             'name' => 'required|string|max:255'
         ]);
 
         $user = User::create([
-            'name' => $validated['name'],
+            'name' => $request->input('name'),
             'email' => uniqid() . '@guest.local',
             'password' => bcrypt('guest1234'),
-            'role' => 'user'
+            'role' => 'user',
         ]);
 
         session(['user_id' => $user->id]);
@@ -30,10 +30,7 @@ class GuestController extends Controller
 
     public function selectQuiz()
     {
-        $userId = session('user_id');
-        $user = $userId ? User::find($userId) : null;
-
-        // Get all quizzes for selection
+        $user = session('user_id') ? User::find(session('user_id')) : null;
         $quizzes = Quiz::all();
 
         return view('selectquiz', compact('user', 'quizzes'));
@@ -46,7 +43,7 @@ class GuestController extends Controller
         return view('question', compact('quiz'));
     }
 
-    public function showResult(Request $request, $quizId)
+    public function showResult(Request $request, int $quizId)
     {
         $userId = session('user_id');
         if (!$userId) {
@@ -54,40 +51,36 @@ class GuestController extends Controller
         }
 
         $userAnswers = json_decode($request->query('answers', '[]'), true);
-
         $quiz = Quiz::with('questions.answers')->findOrFail($quizId);
 
         $correctCount = 0;
-        $totalQuestions = count($quiz->questions);
-
         $result = Result::create([
             'user_id' => $userId,
             'score' => 0,
         ]);
 
         foreach ($quiz->questions as $index => $question) {
-            $selectedAnswerIndex = $userAnswers[$index] ?? null;
-            $selectedAnswer = ($selectedAnswerIndex !== null) ? $question->answers[$selectedAnswerIndex] ?? null : null;
-            $wasCorrect = $selectedAnswer ? (bool) $selectedAnswer->correct : false;
+            $selectedIndex = $userAnswers[$index] ?? null;
+            $selectedAnswer = $selectedIndex !== null ? $question->answers[$selectedIndex] ?? null : null;
+            $isCorrect = $selectedAnswer && $selectedAnswer->correct;
 
-            if ($wasCorrect) {
+            if ($isCorrect) {
                 $correctCount++;
             }
 
             ResultDetail::create([
                 'result_id' => $result->id,
                 'question_id' => $question->id,
-                'answer_id' => $selectedAnswer ? $selectedAnswer->id : null,
-                'was_correct' => $wasCorrect,
+                'answer_id' => $selectedAnswer?->id,
+                'was_correct' => $isCorrect,
             ]);
         }
 
-        $result->score = $correctCount;
-        $result->save();
+        $result->update(['score' => $correctCount]);
 
         return view('result', [
             'correct' => $correctCount,
-            'total' => $totalQuestions,
+            'total' => count($quiz->questions),
         ]);
     }
 }

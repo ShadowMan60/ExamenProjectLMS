@@ -94,13 +94,14 @@ class AdminController extends Controller
 
     public function addQuestionWithAnswers(Request $request)
     {
+        // Validate only basic fields manually
         $request->validate([
             'quiz_id' => 'required|exists:quizzes,id',
             'text' => 'required|string',
             'answers' => 'required|array|size:3',
             'answers.*.text' => 'required|string',
             'correct_answer' => 'required|integer|between:0,2',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+            // Do NOT use 'image' validation rule here
         ]);
 
         $question = new Question();
@@ -108,8 +109,23 @@ class AdminController extends Controller
         $question->text = $request->text;
         $question->order = Question::where('quiz_id', $request->quiz_id)->max('order') + 1 ?? 1;
 
-        if ($request->hasFile('image')) {
-            $question->image = $request->file('image')->store('questions', 'public');
+        // Handle image upload manually
+        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $originalName = $_FILES['image']['name'];
+            $tmpPath = $_FILES['image']['tmp_name'];
+            $ext = pathinfo($originalName, PATHINFO_EXTENSION);
+            $filename = uniqid('question_') . '.' . $ext;
+
+            $destination = public_path('storage/questions/' . $filename);
+
+            // Ensure directory exists
+            if (!is_dir(public_path('storage/questions'))) {
+                mkdir(public_path('storage/questions'), 0755, true);
+            }
+
+            move_uploaded_file($tmpPath, $destination);
+
+            $question->image = 'questions/' . $filename;
         }
 
         $question->save();

@@ -56,11 +56,9 @@
 <body>
     <h1 id="question-text">{{ $quiz->questions[0]->text }}</h1>
 
-    @if ($quiz->questions[0]->image)
-        <img id="question-image" src="{{ asset('storage/' . $quiz->questions[0]->image) }}" alt="Question Image" />
-    @else
-        <img id="question-image" style="display:none;" />
-    @endif
+    <img id="question-image"
+         style="display: none; max-width:300px;"
+         alt="Question Image" />
 
     <div id="answers-container">
         @foreach ($quiz->questions[0]->answers as $answer)
@@ -82,7 +80,7 @@
             questionTextEl.textContent = question.text;
 
             if (question.image) {
-                questionImageEl.src = `/storage/${question.image}`;
+                questionImageEl.src = "{{ url('storage') }}/" + question.image;
                 questionImageEl.style.display = 'block';
             } else {
                 questionImageEl.style.display = 'none';
@@ -102,7 +100,6 @@
 
         function selectAnswer(answerIndex) {
             userAnswers[currentQuestionIndex] = answerIndex;
-
             currentQuestionIndex++;
 
             if (currentQuestionIndex >= quiz.questions.length) {
