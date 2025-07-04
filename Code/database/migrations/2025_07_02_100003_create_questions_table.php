@@ -10,7 +10,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('quiz_id')->constrained()->cascadeOnDelete();
             $table->text('text');
-            $table->integer('order')->default(0); // Order of the question in the quiz
+            $table->integer('order')->default(0);
             $table->timestamps();
         });
     }

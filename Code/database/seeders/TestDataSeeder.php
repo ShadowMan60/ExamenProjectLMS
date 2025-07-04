@@ -12,7 +12,6 @@ class TestDataSeeder extends Seeder
 {
     public function run(): void
     {
-        // Create quizzes with questions and answers
         Quiz::factory(3)->create()->each(function ($quiz) {
             Question::factory(3)->create(['quiz_id' => $quiz->id])->each(function ($question) {
                 Answer::factory()->count(3)->sequence(
@@ -23,7 +22,6 @@ class TestDataSeeder extends Seeder
             });
         });
 
-        // Admin user
         User::factory()->create([
             'name' => 'Admin QA',
             'email' => 'qa_admin@example.com',

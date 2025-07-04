@@ -10,7 +10,6 @@ class QuizSeeder extends Seeder
 {
     public function run()
     {
-        // Quiz 1
         $quiz1 = Quiz::create(['name' => 'Quiz 1']);
 
         $quiz1->questions()->createMany([
@@ -18,7 +17,6 @@ class QuizSeeder extends Seeder
             ['text' => 'Question 2 for Quiz 1', 'order' => 2],
         ]);
 
-        // Quiz 2
         $quiz2 = Quiz::create(['name' => 'Quiz 2']);
 
         $quiz2->questions()->createMany([
@@ -26,7 +24,6 @@ class QuizSeeder extends Seeder
             ['text' => 'Question 2 for Quiz 2', 'order' => 2],
         ]);
 
-        // Quiz 3
         $quiz3 = Quiz::create(['name' => 'Quiz 3']);
 
         $quiz3->questions()->createMany([

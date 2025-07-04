@@ -9,7 +9,6 @@ class ResultDetail extends Model
 {
     use HasFactory;
 
-    // Fillable fields for mass assignment
     protected $fillable = [
         'result_id',
         'question_id',
@@ -17,19 +16,16 @@ class ResultDetail extends Model
         'was_correct',
     ];
 
-    // Relation: A ResultDetail belongs to a Result
     public function result()
     {
         return $this->belongsTo(Result::class);
     }
 
-    // Relation: A ResultDetail belongs to a Question
     public function question()
     {
         return $this->belongsTo(Question::class);
     }
 
-    // Relation: A ResultDetail belongs to an Answer
     public function answer()
     {
         return $this->belongsTo(Answer::class);

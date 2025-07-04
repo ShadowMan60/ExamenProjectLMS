@@ -13,7 +13,7 @@ class QuestionFactory extends Factory
     {
         return [
             'text' => $this->faker->sentence(),
-            'order' => 1, // will be overwritten if needed
+            'order' => 1,
             'image' => null,
         ];
     }

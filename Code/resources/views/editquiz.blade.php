@@ -233,7 +233,6 @@
                 }
             });
 
-            // Correctly generate form action using Laravel route helper
             form.action = `{{ route('admin.edit-answers', ['question' => 'QUESTION_ID']) }}`.replace('QUESTION_ID', questionId);
         }
 
@@ -256,10 +255,8 @@
             const confirmed = confirm("Are you sure you want to delete this question?");
             if (!confirmed) return false;
 
-            // Submit the form (will delete question from DB)
             form.submit();
 
-            // Then send request to delete image from filesystem
             if (imagePath) {
                 fetch(`/admin/delete-question-image/${encodeURIComponent(imagePath)}`, {
                     method: 'DELETE',
@@ -274,7 +271,7 @@
                 });
             }
 
-            return false; // prevent double-submit — form.submit() is already called manually
+            return false;
         }
     </script>
 </body>
