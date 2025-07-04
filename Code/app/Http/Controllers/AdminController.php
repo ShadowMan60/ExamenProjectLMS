@@ -63,18 +63,28 @@ class AdminController extends Controller
     {
         $request->validate([
             'text' => 'required|string',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
 
         $question = Question::findOrFail($id);
         $question->text = $request->input('text');
 
-        if ($request->hasFile('image')) {
-            // Delete old image if exists
-            if ($question->image && Storage::disk('public')->exists($question->image)) {
-                Storage::disk('public')->delete($question->image);
+        // Handle image upload manually
+        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $originalName = $_FILES['image']['name'];
+            $tmpPath = $_FILES['image']['tmp_name'];
+            $ext = pathinfo($originalName, PATHINFO_EXTENSION);
+            $filename = uniqid('question_') . '.' . $ext;
+
+            $destination = public_path('storage/questions/' . $filename);
+
+            // Ensure directory exists
+            if (!is_dir(public_path('storage/questions'))) {
+                mkdir(public_path('storage/questions'), 0755, true);
             }
-            $question->image = $request->file('image')->store('questions', 'public');
+
+            move_uploaded_file($tmpPath, $destination);
+
+            $question->image = 'questions/' . $filename;
         }
 
         $question->save();
