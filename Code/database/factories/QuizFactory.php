@@ -11,10 +11,8 @@ class QuizFactory extends Factory
 
     public function definition()
     {
-        $this->faker->addProvider(new \Faker\Provider\Lorem($this->faker));
         return [
-            'title' => $this->faker->sentence(3),
-
+            'name' => $this->faker->sentence(3),
         ];
     }
 }
