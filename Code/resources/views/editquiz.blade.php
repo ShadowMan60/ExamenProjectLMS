@@ -231,7 +231,8 @@
                 }
             });
 
-            form.action = `/admin/edit-answers/${questionId}`;
+            // Correctly generate form action using Laravel route helper
+            form.action = `{{ route('admin.edit-answers', ['question' => 'QUESTION_ID']) }}`.replace('QUESTION_ID', questionId);
         }
 
         function closeModal() {

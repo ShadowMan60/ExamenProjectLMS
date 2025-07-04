@@ -5,38 +5,26 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\GuestController;
 
-// Welcome page
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Start quiz for guest
 Route::post('/start', [GuestController::class, 'store'])->name('guest.start');
-
-// Guest selects quiz
 Route::get('/selectquiz', [GuestController::class, 'selectQuiz'])->name('selectquiz');
-
-// Guest views quiz and results
 Route::get('/quiz/{quiz}', [GuestController::class, 'showQuiz'])->name('quiz.show');
 Route::get('/results/{quizId}', [GuestController::class, 'showResult'])->name('showResult');
 
-// Admin login
 Route::get('/adminacces', function () {
     return view('adminacces');
 })->name('admin.login.form');
-Route::post('/admin/login', [AdminController::class, 'login'])->name('admin.login');
 
-// Admin quiz management
+Route::post('/admin/login', [AdminController::class, 'login'])->name('admin.login');
 Route::get('/admin/selectquiz', [AdminController::class, 'selectQuiz'])->name('admin.selectquiz');
 Route::get('/admin/editquiz/{quiz}', [AdminController::class, 'editquiz'])->name('admin.editquiz');
 Route::put('/admin/edit-question/{id}', [AdminController::class, 'updateQuestion'])->name('admin.edit-question');
 Route::put('/admin/edit-answer/{id}', [AdminController::class, 'updateAnswer'])->name('admin.edit-answer');
-Route::put('/admin/edit-answers/{question}', [AdminController::class, 'updateAnswersForQuestion']);
+Route::put('/admin/edit-answers/{question}', [AdminController::class, 'updateAnswersForQuestion'])->name('admin.edit-answers');
 Route::post('/admin/add-question-with-answers', [AdminController::class, 'addQuestionWithAnswers'])->name('admin.add-question-with-answers');
 Route::delete('/admin/delete-question/{id}', [AdminController::class, 'deleteQuestion'])->name('admin.delete-question');
-
-// Admin results view
 Route::get('/admin/results/{quiz}', [QuizController::class, 'showResult'])->name('quiz.results');
-
-// Utility route to create admin user
 Route::get('/addadminuser', [AdminController::class, 'addAdminUser']);
